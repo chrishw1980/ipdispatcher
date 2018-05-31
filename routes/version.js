@@ -7,11 +7,11 @@ var return_json = require("./util/returnCommon")
 router.get('/', function(req, res, next) {
     var version = req.query["version"];
     var sysid = req.query["sysid"];
-    var config = datas.loaddata(sysid);
-    if(version == null && version ==''){
-        res.send(return_json.ejson("501","wrong para!"));
-    }else {
-        res.send(return_json.ejson("200",config));
+    var sysCurrentVersion = datas.loadmanifest(sysid);
+    if(sysCurrentVersion > version){
+        res.send(return_json.ejson("200",{"needUpdata":true,"version":sysCurrentVersion}));
+    }else{
+        res.send(return_json.ejson("200",{"needUpdata":false,"version":sysCurrentVersion}));
     }
 });
 
